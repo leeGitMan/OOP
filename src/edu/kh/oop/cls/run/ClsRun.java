@@ -8,7 +8,7 @@ public class ClsRun {
 		
 		
 		ClsService pa = new ClsService();
-		pa.ex2();
+		pa.ex3();
 		
 		
 	}
