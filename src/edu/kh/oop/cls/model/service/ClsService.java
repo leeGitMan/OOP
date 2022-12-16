@@ -12,7 +12,7 @@ public class ClsService {
 		//TestVo test = new TestVo();
 		//default class인 TestVo는 import 불가하다. because 다른 패키지라서
 		
-		System.out.println(std.v1);
+		System.out.println(std.v1); // 왜 protected는 안되는가? 야이 멍청아 같은 패키지가 아니니깐 안되지
 		// 다른 패키지에서도 접근 가능한 public만 에러가 없다.
 		
 		
