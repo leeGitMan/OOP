@@ -16,6 +16,9 @@ public class MemberService { // 클래스
 									//지정 해온 입력 장치 (키보드)
 	
 	private Member memberInfo = null; // 가입할 회원의 정보를 저장할 변수
+	
+	
+	
 	private Member loginMember = null; // 로그인한 회원의 정보를 저장할 변수
 	
 	// 기능(생성자, 메서드)
@@ -66,9 +69,105 @@ public class MemberService { // 클래스
 	// -> void(텅빈, 무효의) : 돌려보낼 값(반환 값)이 없다는 뜻.
 	
 	
+	// 메뉴 화면 출력 기능 메소드
+	
+	public void displayMenu() {
+		// 일은 하는데, 결과 값이 없다.
+		int menuNum = 0; // 지역 변수
+		
+		
+		do { // 한 번 무조건 반복
+			System.out.println("======회원 정보 관리 프로그램======");
+			System.out.println("1. 회원 가입");
+			System.out.println("2. 로그인");
+			System.out.println("3. 회원 정보 조회");
+			System.out.println("4. 회원 정보 수정");
+			System.out.println("0. 프로그램 종료");
+			
+			
+			System.out.print("메뉴 입력 >>>>>");
+			
+			menuNum = sc.nextInt(); // 필드에 작성 된 Scanner sc를 사용
+			sc.nextLine(); // 입력 버퍼에 남은 개행 문자 제거
+			
+			switch(menuNum) {
+			case 1 : System.out.println(signUp()); break;
+			case 2 : System.out.println(login()); break;
+			case 3 : break;
+			case 4 : break;
+			case 0 : break;
+			default : System.out.println("잘못 입력 하셨습니다. 다시 입력바랍니다.");
+			}
+		}while(menuNum != 0); // 메뉴넘이 0이 아닐 때 까지 반복, 
+							  // 메뉴 0이면 반복 종료
+	}
 	
 	
+	// 회원 가입 기능 있는 메소드
+	public String signUp() {
+		//(반환형 스트링이 있기에 리턴없다고 에러남)
+		System.out.println("**** 회원 가입 ****");
+		
+		System.out.print("아이디 입력 : ");
+		String memberId = sc.next(); // user 01
+		
+		System.out.print("패스워드 입력 : ");
+		String memberPw = sc.next();
+		
+		System.out.print("패스워드 확인 입력 : ");
+		String memberPw2 = sc.next();
+		
+		System.out.print("이름 입력 : ");
+		String memberName = sc.next();
+		
+		System.out.print("나이 입력 : ");
+		int memberAge = sc.nextInt();
+		
+		// 비밀번호, 비밀번호 확인이 일치하면 회원 가입
+		// 일치하지 않으면 회원 가입 실패 구문 입력
+		
+		if(memberPw.equals(memberPw2)) { // 일치하는 경우
+			
+		memberInfo = new Member(memberId, memberPw, memberName, memberAge); 
+		return "회원 가입 성공!";
+		
+		}else {
+			return "회원 가입 실패! (비밀번호 불일치)";	
+		}
+	}
 	
 	
+	// 로그인 기능이 있는 메소드
 	
+	public String login() {
+		
+		System.out.println("***** 로그인 ****");
+		
+		// 회원 가입을 했는지 부터 확인하는 작업을 해야함.
+		// == memberInfo 객체를 참조하는 지 확인
+		
+		if(memberInfo == null) { //회원 가입 안한 경우
+			
+			return "회원 가입부터 진행해주세요.";
+			
+		}
+		
+		System.out.print("아이디 입력 : ");
+		String memberId = sc.next();
+		
+		System.out.print("비밀 번호 입력 : ");
+		String memberPw = sc.next();
+		
+		if(memberId.equals(memberInfo.getMemberId()) && 
+				memberPw.equals(memberInfo.getMemberPw())){
+			
+			loginMember = memberInfo;
+			
+			return loginMember.getMemberName() + "님 환영합니다.";
+		}else {
+			return "아이디 또는 비밀번호가 일치하지 않습니다.";
+		}
+	}
+	// 회원 정보 조회 가능 메소드
+	// 회원 정보 수정(update) 메소드
 }

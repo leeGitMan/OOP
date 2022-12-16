@@ -16,6 +16,8 @@ public class MemberRun {
 		// !!! 주의할 점 !!!
 		// 생성자가 하나라도 있으면, 기본 생성자 자동 생성을 안해줌.
 		
+		ms.displayMenu();
+		
 		
 	}
 
