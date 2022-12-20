@@ -13,7 +13,7 @@ public class MemberService { // 클래스
 	
 	private Scanner sc = new Scanner(System.in);
 									//System.in : 자바에서 기본적으로 
-									//지정 해온 입력 장치 (키보드)
+									//지정 해온 입력 장치 (키보드) 
 	
 	private Member memberInfo = null; // 가입할 회원의 정보를 저장할 변수
 	
@@ -93,9 +93,20 @@ public class MemberService { // 클래스
 			switch(menuNum) {
 			case 1 : System.out.println(signUp()); break;
 			case 2 : System.out.println(login()); break;
-			case 3 : break;
-			case 4 : break;
-			case 0 : break;
+			case 3 : System.out.println(selectMember());break;
+			case 4 : 
+				// 회원 정보 수정 메서드 수행 후
+				// 반환되는 결과를 result 변수에 저장
+				int result = updateMember(); // -1 or 0 or 1
+				if( result == -1) {
+					System.out.println("로그인 후 이용해주세요.");
+				}else if (result == 0) {
+					System.out.println("회원 정보 수정 실패!(비밀번호 불일치)");
+				}else {
+					System.out.println("회원 정보 수정완료!");
+				} 
+				break;
+			case 0 : System.out.println("종료하겠습니다."); break;
 			default : System.out.println("잘못 입력 하셨습니다. 다시 입력바랍니다.");
 			}
 		}while(menuNum != 0); // 메뉴넘이 0이 아닐 때 까지 반복, 
@@ -168,6 +179,150 @@ public class MemberService { // 클래스
 			return "아이디 또는 비밀번호가 일치하지 않습니다.";
 		}
 	}
+	
+	
 	// 회원 정보 조회 가능 메소드
+	
+	/*
+	public String findInfo() {
+		
+		// 로그인 상태인지 아닌지 확인
+		System.out.print("==============회원 정보 찾기==============");
+		
+		if(loginMember == null) {
+			return "로그인 먼저 진행해주세요.";
+		}
+		else if(loginMember != null) {
+			System.out.println("정보 조회 전 아이디를 입력해주세요.");
+			String memberId = sc.next();
+			
+			System.out.println("정보 조회 전 비밀번호를 입력해주세요."); 
+			String memberPw = sc.next();
+			
+			if(memberId.equals(memberInfo.getMemberId()) && memberPw.equals(memberInfo.getMemberPw())) {
+				
+				return "귀하의 성함은 " + memberInfo.getMemberName() + "\n귀하의 나이는 " + memberInfo.getMemberAge() + "살입니다.";
+			}
+		}return "회원 정보를 잘못 입력하셨습니다.";
+	}
+	*/
+	
+	//create read update delete -->CRUD
+	public String selectMember() {
+		System.out.println("**** 회원 정보 조회 ****");
+		
+		// 1) 로그인 여부 확인 --> 필드 loginMember가 참조하고 있는 객체가 있는지 없는지 확인
+		if(loginMember == null) {
+			return "로그인 먼저 진행해주세요.";
+		}
+		// 이름 컨트롤 누르고 눌러보면 어디로 가는지 위치를 보여줌
+		String str = "이름 : " + loginMember.getMemberName();
+		str += "\n아이디 : " + loginMember.getMemberId();
+		str += "\n나이 : " + loginMember.getMemberAge();
+		// 2) 로그인이 되어있는 경우
+		//		회원 정보를 출력할 문자열을 만들어서 반환(return)
+		//		단, 비밀번호는 제외
+		return str;
+	}
+	
+	
+	
+	
 	// 회원 정보 수정(update) 메소드
+	
+	public int updateMember() {
+		System.out.println("\n**** 회원 정보 수정 ****");
+		
+		// 1) 로그인 여부 판별
+		// 로그인이 되어있지 않으면 -1 반환
+		
+		if(loginMember == null) {
+			return -1;
+		}
+		
+		
+		// 2) 수정할 회원 정보 입력 받기(이름,나이)
+		System.out.print("수정할 이름 입력");
+		String inputName = sc.next();
+		
+		System.out.print("수정할 나이 입력");
+		int inputAge = sc.nextInt();
+		
+		sc.nextLine();
+		// sc.next(), sc.nextInt(), sc.nextDouble()
+		// sc.nextLine(); 쓰기 입력버퍼가 사라짐 안하면
+		// 그냥 외워
+		
+		
+		
+		// 3) 비밀번호 입력 받아서
+		// 		로그인한 회원의 비밀번호와 일치한지 확인하기
+		
+		System.out.print("비밀번호 입력 : ");
+		String inputPw = sc.next();
+		
+		
+		// 4) 비밀번호 같은 경우
+		//		로그인한 회원의 이름, 나이 정보를 입력받은 값으로 변경 후
+		//		1 반환
+		
+		if(inputPw.equals(loginMember.getMemberPw())) {
+			loginMember.setMemberName(inputName);
+			// 입력받은 inputName을
+			// loginMember가 참조하는 Member객체의 필드 memberName에 대입
+			loginMember.setMemberAge(inputAge);
+
+			return 1;
+		}
+		
+		// 5) 비밀번호 다를 경우 0 반환
+		else {
+			return 0;
+		}
+	}
+	/*
+	public String updateInfo() {
+		
+		System.out.print("==============회원 정보 수정==============\n");
+		int menuNum = 0;
+		String memberId = null;
+		String memberPw = null;
+		String memberName = null;
+		int memberAge = 0;
+		
+		// 로그인 확인
+		if(loginMember == null) {
+			return "로그인 먼저 진행해주세요.";
+		}
+		else if(loginMember != null) { // 로그인 확인 됐을 시
+			
+			do { // 바꾸고 싶은 회원 정보 목록 주기
+				System.out.println("바꾸고 싶은 회원 정보 번호를 눌러주세요.");
+			
+				System.out.println("1. 아이디 변경");
+				System.out.println("2. 비밀번호 변경");
+				System.out.println("3. 이름 변경");
+				System.out.println("4. 나이 변경");
+				System.out.println("0. 종료");
+				
+				menuNum = sc.nextInt();
+			
+			
+				switch(menuNum) {
+			
+				case 1: System.out.print("변경 하고 싶은 아이디를 입력하세요."); memberId = sc.next(); break;
+				case 2: System.out.print("변강하고 싶은 비밀번호를 입력하세요."); memberPw = sc.next(); break;
+				case 3: System.out.print("변경하고 싶은 이름을 입력하세요."); memberName = sc.next(); break;
+				case 4: System.out.print("변경하고 싶은 나이를 입력하세요."); memberAge = sc.nextInt(); break;
+				case 0: System.out.print("정보 업데이트를 종료하겠습니다."); break;
+				default : System.out.println("번호를 잘못 눌렀습니다. 다시 입력해주세요.");
+				
+				memberInfo.setMemberId(memberId);
+				memberInfo.setMemberName(memberName);
+				memberInfo.setMemberPw(memberPw);
+				memberInfo.setMemberAge(memberAge);
+				}
+			}while(menuNum != 0);
+		}return "";
+	}*/
 }

@@ -1,6 +1,7 @@
 package edu.kh.oop.method.run;
 
 import edu.kh.oop.method.model.service.MemberService;
+import edu.kh.oop.method.model.service.MemberService2;
 
 public class MemberRun {
 
@@ -17,6 +18,8 @@ public class MemberRun {
 		// 생성자가 하나라도 있으면, 기본 생성자 자동 생성을 안해줌.
 		
 		ms.displayMenu();
+		
+		
 		
 		
 	}
